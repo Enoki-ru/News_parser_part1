@@ -1,0 +1,30 @@
+{
+	"nodes":[
+		{"id":"3b13ec5088e10fef","type":"group","x":-400,"y":-600,"width":1960,"height":1280,"color":"6","label":"Источник данных"},
+		{"id":"40bc1110dd469314","type":"text","text":"## Подключение к источнику данных\n\nНужно найти источник данных, желательно **API**, который будет обновляться каждый день, с бесплатным тарифом, и выбором языков","x":880,"y":-120,"width":660,"height":256},
+		{"id":"ad37091ec4ebf6f7","type":"text","text":"## **parsed=pd.DataFrame**\n\n|№|Title|Author|Year|Month|Day|\n|---|---|---|---|---|\n|0|Apple внедрит ИИ во все свои устройства и мног...|Lifehacker.ru|2023|10|24|\n","x":100,"y":-580,"width":647,"height":197},
+		{"id":"425e3b90e7577a58","type":"text","text":"## Входные данные\n- `json` файл, генерируемый из API\n- Объединение запросов для разных страниц с данными в общий `DataFrame`","x":7,"y":-120,"width":417,"height":243},
+		{"id":"6bbb1fd07b45c33b","type":"text","text":"## API\nhttps://newsapi.org/\n\n![](Self_education/News_checker/src/Pasted%20image%2020231030114042.png)\n","x":216,"y":239,"width":584,"height":400},
+		{"id":"ef3071188d696c44","type":"text","text":"## Pages\nНеобходимо учитывать, что каждый API запрос ограничен **100 статьями**. Поэтому нужно сделать **цикл**, в котором будет меняться номер страницы","x":-370,"y":439,"width":470,"height":200},
+		{"id":"b998a4d8513af972","type":"text","text":"## Разбиваем общий текст статей на лист с разделением на слова","x":240,"y":-1040,"width":421,"height":107},
+		{"id":"22ae80aebe7a1da6","type":"text","text":"## Приводим слова к начальной форме\nНужно все слова, чтобы они были одного формата, привести к начальной форме\n\n```python\n# инициализируем лемматайзер MorphAnalyzer()\nlemmatizer = pymorphy2.MorphAnalyzer()\n \n# функция для лемматизации текста, на вхд принимает список токенов \ndef lemmatize_text(tokens):\n    # создаем переменную для хранения преобразованного текста\n    text_new=''\n    # для каждого токена в тексте\n    for word in tokens:\n        # с помощью лемматайзера получаем основную форму\n        word = lemmatizer.parse(word)\n        # добавляем полученную лемму в переменную с преобразованным текстом\n        text_new = text_new + ' ' + word[0].normal_form\n    # возвращаем преобразованный текст\n    return text_new\n```","x":-50,"y":-1960,"width":1001,"height":612},
+		{"id":"16aff708ebf15efd","type":"text","text":"## Создание Стоп-слов\n\nНужно добавить слова или символы, которые не будут учитываться в расчетах. Это могут быть\n- Местоимения\n- Предлоги\n- Вводные слова\n- `:;-+=_!/\\'\"@#$%^&*` ","x":-1120,"y":-430,"width":576,"height":310},
+		{"id":"5f1ca94d3d66bc00","type":"text","text":"## **stop_words**\n\n```python\nfrom nltk.corpus import stopwords\nstop_words = stopwords.words('russian')\n\nstop_append=[',',':','—','«','»','лайфхакер','подкаст','который','нрф','ия','','','',]\nstop_words=stop_words+stop_append\n```","x":-796,"y":-1193,"width":504,"height":414},
+		{"id":"4d23abdcf9616059","type":"text","text":"## Get API Key\nДля использования нужно зарегистрироваться, чтобы получить свой API_key","x":1040,"y":439,"width":340,"height":163},
+		{"id":"52044f8534b59430","x":1320,"y":-1764,"width":426,"height":221,"type":"text","text":"## df= pd.DataFrame()\n\n|Слово|Частота|Дата|\n|---|---|---|\n|Apple|0.98|30.10.22|\n|Iphone|0.77|29.10.22|\n"},
+		{"id":"2f45665df027c5a1","type":"text","text":"Создаем **Облако** слов\n![|500](Self_education/News_checker/src/Pasted%20image%2020231101001213.png)","x":1136,"y":-2520,"width":544,"height":380,"color":"4"}
+	],
+	"edges":[
+		{"id":"0fbbf66239e022d8","fromNode":"4d23abdcf9616059","fromSide":"left","toNode":"6bbb1fd07b45c33b","toSide":"right"},
+		{"id":"2c278c02206249c5","fromNode":"ef3071188d696c44","fromSide":"right","toNode":"6bbb1fd07b45c33b","toSide":"left"},
+		{"id":"99bad59d8a697f97","fromNode":"6bbb1fd07b45c33b","fromSide":"top","toNode":"425e3b90e7577a58","toSide":"bottom"},
+		{"id":"f70e0bd93415a974","fromNode":"425e3b90e7577a58","fromSide":"top","toNode":"ad37091ec4ebf6f7","toSide":"bottom"},
+		{"id":"230556eaa62270c4","fromNode":"40bc1110dd469314","fromSide":"left","toNode":"ad37091ec4ebf6f7","toSide":"bottom","color":"5"},
+		{"id":"dbac15f7fa5781e9","fromNode":"b998a4d8513af972","fromSide":"top","toNode":"22ae80aebe7a1da6","toSide":"bottom"},
+		{"id":"f953bd69d6e1dd58","fromNode":"3b13ec5088e10fef","fromSide":"top","toNode":"b998a4d8513af972","toSide":"bottom"},
+		{"id":"d9e5ff27cf6a8c92","fromNode":"16aff708ebf15efd","fromSide":"top","toNode":"5f1ca94d3d66bc00","toSide":"bottom","color":"5"},
+		{"id":"42db49efaffe173e","fromNode":"5f1ca94d3d66bc00","fromSide":"right","toNode":"22ae80aebe7a1da6","toSide":"bottom"},
+		{"id":"856310ea23e44c34","fromNode":"22ae80aebe7a1da6","fromSide":"right","toNode":"2f45665df027c5a1","toSide":"left"},
+		{"id":"c89617d66acb2ba1","fromNode":"22ae80aebe7a1da6","fromSide":"right","toNode":"52044f8534b59430","toSide":"left"}
+	]
+}
